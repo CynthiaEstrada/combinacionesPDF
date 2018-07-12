@@ -8,13 +8,9 @@ $(document).ready(function() {
     var TmpPath = URL.createObjectURL(e.target.files[0]);
     // Mostramos la ruta temporal
     PDF_URL= TmpPath;
-  /*  $('span').html(TmpPath);
-    $('img').attr('src', TmpPath);*/
   });
 
 });
-
-//PDF_URL = document.getElementById('file-input');
 
 function Cargar(){
   var loadingTask = PDFJS.getDocument(PDF_URL);
@@ -23,13 +19,14 @@ function Cargar(){
 
     // Fetch the first page
     var pageNumber = 1;
+
     pdf.getPage(pageNumber).then(function(page) {
       console.log('Page loaded');
 
       var scale = 1.5;
       var viewport = page.getViewport(scale);
 
-      // Prepare canvas using PDF page dimensions
+
       var canvas = document.getElementById('the-canvas');
       var context = canvas.getContext('2d');
       canvas.height = viewport.height;
@@ -52,8 +49,8 @@ function Cargar(){
 
   PDFJS.getDocument(PDF_URL).then(function (PDFInstancia) {
 
+
 var totalpaginas = PDFInstancia.pdfInfo.numPaginas;
-console.log(totalpaginas);
 var numeroPagina = 1;
 
 obtenerPagina(numeroPagina, PDFInstancia).then(function(textPage){
@@ -65,6 +62,9 @@ obtenerPagina(numeroPagina, PDFInstancia).then(function(textPage){
   });
 //}
 
+var pru = 0;
+var combinaciones = [];
+var tipoCombinaciones;
 
 function obtenerPagina(numeroPagina, PDFInstancia) {
 
@@ -73,18 +73,29 @@ function obtenerPagina(numeroPagina, PDFInstancia) {
 
             pdfPage.getTextContent().then(function (textContent) {
                 var textItems = textContent.items;
-                var final = "";
+                var cont = 0;
 
                 for (var i = 0; i < textItems.length; i++) {
-                    var i = textItems[i];
+                    var item = textItems[i];
+                    pru +=1;
+                      var reExp = /\w\s+\w\s+\w\s+\w\s+\w/;
 
-                    final += item.str + " ";
+                      var ok = reExp.test(item.str);
+                      if(ok){
+                        console.log(item.str);
+                        combinaciones[cont] = item.str;
+                        cont ++;
+                      }else{
+                        console.log("no encontrado");
+                      }
                 }
-                console.log(final);
-                resolve(final);
+                for(var i = 0; i < 10; i++){
+                  console.log(combinaciones[i] + "\n");
+                }
             });
         });
     });
 }
+
 
 }
