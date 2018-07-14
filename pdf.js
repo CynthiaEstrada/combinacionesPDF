@@ -77,28 +77,6 @@ $(document).ready(function() {
 
       pdfPage.getTextContent().then(function (textContent) {
 
-        function datosCombinacion( fecha, sorteo, tipo, combinacion, cantidad){
-
-          this.fecha = "";
-          this.sorteo = "";
-          this.tipo = "";
-          this.combinacion = "";
-          this.cantidad = "";
-
-        }
-
-        function mostrar(o){
-
-          var objetoAInspeccionar;
-          var resultado = [];
-
-          for(objetoAInspeccionar = o; objetoAInspeccionar !== null; objetoAInspeccionar = Object.getPrototypeOf(objetoAInspeccionar)){
-          resultado = resultado.concat(Object.getOwnPropertyNames(objetoAInspeccionar)) + "\n";
-          }
-
-          return resultado;
-
-        }
           var textItems = textContent.items;
           var combinaciones = [];//arreglo donde se guadan las combinaciones obtenidas
           var cont = 0;
@@ -139,7 +117,7 @@ $(document).ready(function() {
                   combinacion = item.str;
                   cantidad = item3.str;
 
-                  combinaciones[cont]={ cantidad, combinacion, fechaSorteo, numSorteo, tipoCombinacion}
+                  combinaciones[cont]={ cantidad, combinacion, numSorteo, tipoCombinacion}
 
                   cont ++;
 
@@ -147,8 +125,13 @@ $(document).ready(function() {
 
                 }
 
-                console.log("Combinaciones: \n");
+                dia = fechaSorteo.substring(4, 6);
+                mes= fechaSorteo.substring(7, 10);
+                mes = mesNumero(mes);
+                anio= fechaSorteo.substring(12, 16);
 
+                console.log("Combinaciones: \n");
+                console.log(dia + "/" + mes + "/" + anio);
                 for(var i = 0; i < combinaciones.length; i++){
 
                   console.log( combinaciones[i]);
@@ -160,6 +143,54 @@ $(document).ready(function() {
 
     });
 
+}
+
+function mesNumero(mes){
+  salir = true;
+  while(salir == true){
+    switch (mes) {
+      case "ENE": salir = false;
+      return 1;
+      break;
+      case "FEB": salir = false;
+      return 2;
+      break;
+      case "MAR": salir = false;
+      return 3;
+      break;
+      case "ABR": salir = false;
+      return 4;
+      break;
+      case "MAY": salir = false;
+      return 5;
+      break;
+      case "JUN": salir = false;
+      return 6;
+      break;
+      case "JUL": salir = false;
+      return 7;
+      break;
+      case "AGO": salir = false;
+      return 8;
+      break;
+      case "SEP": salir = false;
+      return 9;
+      break;
+      case "OCT": salir = false;
+      return 10;
+      break;
+      case "NOV": salir = false;
+      return 11;
+      break;
+      case "DIC": salir = false;
+      return 12;
+      break;
+
+      default: return mes;
+      break;
+
+    }
+  }
 }
 
 }
