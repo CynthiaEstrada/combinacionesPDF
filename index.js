@@ -15,7 +15,6 @@ var messageRef = dbRef.ref("message");
 messageRef.once('value').then(function(snap){
 
 });
-
 /*
 var db = firebase.database();
 var ref = db.ref("server/saving-data/fireblog");
@@ -161,17 +160,18 @@ $(document).ready(function() {
                 }
 
                 if(ok){
-
-                  tipoCombinacion = item2.str;
-                  combinacion = item.str;
-                  cantidad = item3.str;
-                  /*console.log(item2.str + "\n");//tipo de combinacion
+                  console.log(item2.str + "\n");//tipo de combinacion
                   console.log(item.str);//combinacion
-                  console.log(item3.str + "\n");//cantidad*/
-                  
-                  //var combRef = dbRef.child("combinaciones");
+                  console.log(item3.str + "\n");//cantidad
 
-                  combinaciones[cont]={ cantidad, combinacion, fechaSorteo, numSorteo, tipoCombinacion}
+                  var combRef = ref.child("combinaciones");
+                  combRef.set({
+                    cantidadApostada: item3.str,
+                    combinacion: item.str,
+                    fecha: fechaSorteo,
+                    sorte: numSorteo,
+                    tipo: item2.str
+                  });
                   //prueba = new datosCombinacion(Fecha, Sorteo, item2.str, item.str, item3.str);
                 //  combinaciones[cont] = new datosCombinacion(Fecha, Sorteo, item2.str, item.str, item3.str);
                   /*combinaciones[cont][1] = item.str;
@@ -183,10 +183,10 @@ $(document).ready(function() {
                 }
 
                 console.log("Combinaciones: \n");
-
+                console.log(prueba.fecha + " " + prueba.combinacion);
                 for(var i = 0; i < combinaciones.length; i++){
-
-                  console.log( combinaciones[i]);
+                  //combinaciones[i].mostrar();
+                //  console.log(combinaciones[i]);
 
               }
             });
