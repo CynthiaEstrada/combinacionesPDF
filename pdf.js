@@ -1,28 +1,3 @@
-// Import Admin SDK
-//var firebase = require("firebase-admin");
-var config = {
-  apiKey: "AIzaSyBJ4dfma4MgQvIjMJwJUp3U5KOKYm_4OFs",
-  authDomain: "combinacionespdf.firebaseapp.com",
-  databaseURL: "https://combinacionespdf.firebaseio.com",
-  projectId: "combinacionespdf",
-  storageBucket: "combinacionespdf.appspot.com",
-  messagingSenderId: "657783964881"
-};
-  firebase.initializeApp(config);
-// Get a database reference to our blog
-var dbRef = firebase.database();
-var messageRef = dbRef.ref("message");
-messageRef.once('value').then(function(snap){
-
-});
-
-/*
-var db = firebase.database();
-var ref = db.ref("server/saving-data/fireblog");
-*/
-
-////////////////////////////////////////////////////////
-
 PDFJS.workerSrc = 'build/pdf.worker.js';
 
 $(document).ready(function() {
@@ -144,8 +119,6 @@ $(document).ready(function() {
                 var ok = reExp.test(item.str);//valida si es o no una combinacion
 
 
-                    //  console.log(item.str + "\n");
-
                 if(Sorteo){
 
                   console.log("Sorteo: " + item.str + "\n");
@@ -165,17 +138,9 @@ $(document).ready(function() {
                   tipoCombinacion = item2.str;
                   combinacion = item.str;
                   cantidad = item3.str;
-                  /*console.log(item2.str + "\n");//tipo de combinacion
-                  console.log(item.str);//combinacion
-                  console.log(item3.str + "\n");//cantidad*/
-                  
-                  //var combRef = dbRef.child("combinaciones");
 
                   combinaciones[cont]={ cantidad, combinacion, fechaSorteo, numSorteo, tipoCombinacion}
-                  //prueba = new datosCombinacion(Fecha, Sorteo, item2.str, item.str, item3.str);
-                //  combinaciones[cont] = new datosCombinacion(Fecha, Sorteo, item2.str, item.str, item3.str);
-                  /*combinaciones[cont][1] = item.str;
-                  combinaciones[cont][2] = item3.str;*/
+
                   cont ++;
 
                       }
