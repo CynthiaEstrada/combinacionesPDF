@@ -1,3 +1,17 @@
+/*import *  as firebase from 'firebase';
+import database from '/const.js';*/
+var config = {
+  apiKey: "AIzaSyBJ4dfma4MgQvIjMJwJUp3U5KOKYm_4OFs",
+  authDomain: "combinacionespdf.firebaseapp.com",
+  databaseURL: "https://combinacionespdf.firebaseio.com",
+  projectId: "combinacionespdf",
+  storageBucket: "combinacionespdf.appspot.com",
+  messagingSenderId: "657783964881"
+};
+firebase.initializeApp(config);
+
+const database = firebase.database();
+
 PDFJS.workerSrc = 'build/pdf.worker.js';
 
 $(document).ready(function() {
@@ -91,6 +105,8 @@ $(document).ready(function() {
                 var reExp = /\w\s+\w\s+\w\s+\w\s+\w/;
                 var reExpSorteo = /\b\d{5}\b/;
                 var reExpFecha= /\w{3}\s\d{2}/;
+                var reExpEspacios = /\b\s*\s*\s*\s*/;
+                var reExpNue = /\w\w\w\w\w/;
 
                 var Sorteo= reExpSorteo.test(item.str);//Valida si es numero de Sorteo
                 var Fecha = reExpFecha.test(item.str);//valida Si es Fecha
@@ -100,7 +116,7 @@ $(document).ready(function() {
                 if(Sorteo){
 
                   console.log("Sorteo: " + item.str + "\n");
-                  numSorteo = item.str;
+                  sorteo = item.str;
 
                   }
 
@@ -113,22 +129,35 @@ $(document).ready(function() {
 
                 if(ok){
 
-                  tipoCombinacion = item2.str;
+                  modalidad = item2.str;
                   combinacion = item.str;
-                  cantidad = item3.str;
+                  cantidadApostada = item3.str;
+                  tipo = 1;
+                  ganado = false;
+                  cantidadGanada=0;
+                  combinacion= item.str.replace(/ /g, "");
+                  modalidad = tipoNum(modalidad);
 
-                  combinaciones[cont]={ cantidad, combinacion, numSorteo, tipoCombinacion}
+                  dia = fechaSorteo.substring(4, 6);
+                  mes= fechaSorteo.substring(7, 10);
+                  mes = mesNumero(mes);
+                  mes -= 1;
+                  anio= fechaSorteo.substring(12, 16);
 
+                  //sorteo, combinacion, cantidadApostada, cantidadganada, modalidad, ganado;
+                  //cantidadganada=0, tipo=1; ganado=false
+
+                  combinaciones[cont]={ cantidadApostada, cantidadGanada, tipo, ganado, combinacion, sorteo, modalidad, dia, mes, anio}
+
+
+
+                  subir(combinaciones[cont]);
                   cont ++;
-
                       }
 
                 }
 
-                dia = fechaSorteo.substring(4, 6);
-                mes= fechaSorteo.substring(7, 10);
-                mes = mesNumero(mes);
-                anio= fechaSorteo.substring(12, 16);
+
 
                 console.log("Combinaciones: \n");
                 console.log(dia + "/" + mes + "/" + anio);
@@ -193,4 +222,55 @@ function mesNumero(mes){
   }
 }
 
+function tipoNum(tipo){
+  salir = true;
+  while(salir == true){
+    switch (tipo) {
+      case "DIRECTA 5": salir = false;
+      return 1;
+      break;
+      case "DIRECTA 4": salir = false;
+      return 2;
+      break;
+      case "DIRECTA 3": salir = false;
+      return 3;
+      break;
+      case "PAR INICIAL": salir = false;
+      return 4;
+      break;
+      case "PAR FINAL": salir = false;
+      return 5;
+      break;
+      case "INICIAL": salir = false;
+      return 6;
+      break;
+      case "FINAL": salir = false;
+      return 7;
+      break;
+
+      default: return tipo;
+      break;
+}
+
+}
+}
+
+function subir(arreglo){
+axios.post('http://localhost:4000/evento',
+{
+  sorteo:arreglo.sorteo,
+  combinacion: arreglo.combinacion,
+  cantidadApostada: arreglo.cantidadApostada,
+  cantidadGanada: arreglo.CantidadGanada,
+  tipo: arreglo.tipo,
+  modalidad: arreglo.modalidad,
+  ganado: arreglo.ganado,
+  dia: arreglo.dia,
+  mes: arreglo.mes,
+  anio:arreglo.cantidadApotada
+}).then(res =>{
+  alert(res.data);
+})
+
+}
 }
