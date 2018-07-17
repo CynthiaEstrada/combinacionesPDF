@@ -1,6 +1,6 @@
 /*import *  as firebase from 'firebase';
 import database from '/const.js';*/
-var config = {
+/*var config = {
   apiKey: "AIzaSyBJ4dfma4MgQvIjMJwJUp3U5KOKYm_4OFs",
   authDomain: "combinacionespdf.firebaseapp.com",
   databaseURL: "https://combinacionespdf.firebaseio.com",
@@ -10,28 +10,36 @@ var config = {
 };
 firebase.initializeApp(config);
 
-const database = firebase.database();
+const database = firebase.database();*/
 
 PDFJS.workerSrc = 'build/pdf.worker.js';
-
+TmpPath=[];
+PDF_URL=[];
 $(document).ready(function() {
-
   // Escuchamos el evento 'change' del input donde cargamos el archivo
   $(document).on('change', 'input[type=file]', function(e) {
     // Obtenemos la ruta temporal mediante el evento
-    var TmpPath = URL.createObjectURL(e.target.files[0]);
+    tamanio = this.files.length;//cantidad de elementos seleccionados
+
+  for(var i = 0; i < tamanio; i++)
+   {
+   TmpPath[i] = URL.createObjectURL(e.target.files[i]);
     // Mostramos la ruta temporal
-    PDF_URL= TmpPath;// URL del archivo PDF
-  });
+    PDF_URL[i]= TmpPath[i];// URL del archivo PDF
+  }
+});
 
 });
 
 
 
-  function Cargar(){
 
+  function Cargar(){
+    for(var i = 0; i <tamanio; i++)
+{
+  PDF_url = PDF_URL[i];
     //visualizar el PDF
-    var loadingTask = PDFJS.getDocument(PDF_URL);
+  /*var loadingTask = PDFJS.getDocument(PDF_url);
     loadingTask.promise.then(function(pdf) {
     console.log('PDF loaded');
 
@@ -58,14 +66,19 @@ $(document).ready(function() {
     console.log('Page rendered');
     });
   });
+
+
 },
     function (reason) {
     // PDF loading error
     console.error(reason);
-  });
+  });*/
+
+
+      /////////////////////////////
 
     //Extraer datos del PDF
-    PDFJS.getDocument(PDF_URL).then(function (PDFInstancia) {
+    PDFJS.getDocument(PDF_url).then(function (PDFInstancia) {
 
     var totalpaginas = PDFInstancia.pdfInfo.numPaginas;
     var numeroPagina = 1;
@@ -94,7 +107,8 @@ $(document).ready(function() {
           var textItems = textContent.items;
           var combinaciones = [];//arreglo donde se guadan las combinaciones obtenidas
           var cont = 0;
-          var columna = 0;
+          var  lista = "";
+
 
             for (var i = 0; i < textItems.length; i++) {
 
@@ -104,7 +118,7 @@ $(document).ready(function() {
 
                 var reExp = /\w\s+\w\s+\w\s+\w\s+\w/;
                 var reExpSorteo = /\b\d{5}\b/;
-                var reExpFecha= /\w{3}\s\d{2}/;
+                var reExpFecha= /[A-Za-zÉÁ]{3}\s\d{2}/;
                 var reExpEspacios = /\b\s*\s*\s*\s*/;
                 var reExpNue = /\w\w\w\w\w/;
 
@@ -144,21 +158,20 @@ $(document).ready(function() {
                   mes -= 1;
                   anio= fechaSorteo.substring(12, 16);
 
-                  //sorteo, combinacion, cantidadApostada, cantidadganada, modalidad, ganado;
-                  //cantidadganada=0, tipo=1; ganado=false
+                  //sorteo, combinacion, cantidadApostada, cantidadganada, modalidad, ganado
 
                   combinaciones[cont]={ cantidadApostada, cantidadGanada, tipo, ganado, combinacion, sorteo, modalidad, dia, mes, anio}
 
 
 
-                  subir(combinaciones[cont]);
+                  //subir(combinaciones[cont])
+
                   cont ++;
                       }
 
                 }
-
-
-
+                document.getElementById("parrafo").innerHTML = "Archivos Cargados";
+                mostrar();
                 console.log("Combinaciones: \n");
                 console.log(dia + "/" + mes + "/" + anio);
                 for(var i = 0; i < combinaciones.length; i++){
@@ -255,7 +268,10 @@ function tipoNum(tipo){
 }
 }
 
-function subir(arreglo){
+function mostrar(){
+document.getElementById('oculto').style.display = 'block';}
+
+/*function subir(arreglo){
 axios.post('http://localhost:4000/evento',
 {
   sorteo:arreglo.sorteo,
@@ -267,10 +283,10 @@ axios.post('http://localhost:4000/evento',
   ganado: arreglo.ganado,
   dia: arreglo.dia,
   mes: arreglo.mes,
-  anio:arreglo.cantidadApotada
+  anio:arreglo.anio
 }).then(res =>{
   alert(res.data);
 })
 
-}
+}*/ }
 }
