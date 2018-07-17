@@ -164,7 +164,7 @@ $(document).ready(function() {
 
 
 
-                  //subir(combinaciones[cont])
+                  subir(combinaciones[cont])
 
                   cont ++;
                       }
@@ -271,7 +271,7 @@ function tipoNum(tipo){
 function mostrar(){
 document.getElementById('oculto').style.display = 'block';}
 
-/*function subir(arreglo){
+function subir(arreglo){
 axios.post('http://localhost:4000/evento',
 {
   sorteo:arreglo.sorteo,
@@ -288,5 +288,5 @@ axios.post('http://localhost:4000/evento',
   alert(res.data);
 })
 
-}*/ }
+} }
 }
